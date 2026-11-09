@@ -1,0 +1,288 @@
+:root {
+  --bg-color: #FAF7F2;
+  --card-bg: #FFFFFF;
+  --primary-pink: #FF80A6;
+  --text-dark: #3A353F;
+  --text-muted: #8E8895;
+  --border-color: rgba(255, 255, 255, 0.8);
+  --shadow-soft: 0 12px 36px rgba(255, 128, 166, 0.12);
+  --doodle-color: rgba(255, 128, 166, 0.35);
+  --border-radius-lg: 24px;
+  --border-radius-md: 14px;
+}
+
+body.dark-mode {
+  --bg-color: #121016;
+  --card-bg: #1C1824;
+  --primary-pink: #FF6693;
+  --text-dark: #F3EFF8;
+  --text-muted: #A098A8;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --shadow-soft: 0 12px 36px rgba(0, 0, 0, 0.4);
+  --doodle-color: rgba(255, 128, 166, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding: 24px 16px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-container {
+  max-width: 1200px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.studio-header { margin-bottom: 24px; }
+.header-top { display: flex; align-items: center; justify-content: center; position: relative; }
+.studio-header .logo { font-family: 'Fredoka', cursive; font-size: 2.5rem; font-weight: 700; color: #FF4081; letter-spacing: 1px; }
+
+.theme-btn {
+  position: absolute; right: 0; background: var(--card-bg); border: 2px solid var(--border-color);
+  border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow-soft);
+}
+
+.studio-header .subtitle { text-align: center; color: #6C5CE7; font-weight: 700; font-size: 0.95rem; margin-top: 4px; }
+body.dark-mode .studio-header .subtitle { color: #A29BFE; }
+
+.studio-workspace { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+.toolkit-card, .board-card {
+  background: var(--card-bg); border-radius: var(--border-radius-lg); padding: 24px;
+  box-shadow: var(--shadow-soft); border: 2px solid var(--border-color);
+}
+
+.toolkit-card h3 { font-family: 'Fredoka', cursive; font-size: 1.3rem; color: var(--primary-pink); margin-bottom: 20px; }
+.setting-group { margin-bottom: 18px; }
+.setting-group label { display: block; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+
+.upload-btn { width: 100%; text-align: center; display: block; cursor: pointer; }
+.color-picker-row, .stamp-pills, .pattern-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pattern-pills { margin-top: 8px; }
+
+.pill-btn, .stamp-btn {
+  border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-dark);
+  padding: 6px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+}
+.pill-btn.active { border-color: var(--primary-pink); background: rgba(255, 128, 166, 0.15); color: var(--primary-pink); }
+
+.color-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border-color); cursor: pointer; }
+.color-dot.active { transform: scale(1.2); border-color: var(--primary-pink); }
+
+.text-input-box {
+  width: 100%; padding: 10px 14px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color);
+  background: var(--bg-color); color: var(--text-dark); outline: none; font-size: 0.85rem; margin-bottom: 8px;
+}
+
+/* Toolbar Format Text & Stabilo */
+.format-toolbar {
+  display: flex; gap: 6px; align-items: center; background: rgba(0,0,0,0.03); padding: 6px; border-radius: 10px;
+}
+.format-btn {
+  background: var(--card-bg); border: 1px solid var(--border-color); width: 30px; height: 30px;
+  border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.format-btn.active { background: var(--primary-pink); color: white; border-color: var(--primary-pink); }
+
+#text-color-picker {
+  border: none; width: 30px; height: 30px; background: transparent; cursor: pointer; border-radius: 6px;
+}
+#highlighter-select {
+  flex: 1; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color);
+  background: var(--card-bg); color: var(--text-dark); font-size: 0.78rem; outline: none; cursor: pointer;
+}
+
+.toolkit-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; padding-top: 14px; border-top: 1px dashed var(--border-color); }
+
+.cute-btn { border: none; padding: 12px 18px; border-radius: var(--border-radius-md); font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.cute-btn.primary { background: var(--primary-pink); color: white; }
+.cute-btn.secondary { background: rgba(0, 0, 0, 0.05); color: var(--text-dark); border: 1px solid var(--border-color); }
+.cute-btn.success { background: #56C596; color: white; }
+.cute-btn.danger { background: #FF5252; color: white; }
+
+.board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
+.help-badge { font-size: 0.75rem; background: rgba(255, 128, 166, 0.15); color: var(--primary-pink); padding: 4px 10px; border-radius: 12px; }
+
+.moodboard-area {
+  position: relative; width: 100%; height: 600px; background-color: #FAF7F2;
+  border-radius: var(--border-radius-md); border: 2px dashed rgba(0, 0, 0, 0.1); overflow: hidden;
+}
+
+.moodboard-area.pattern-grid {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px); background-size: 20px 20px;
+}
+.moodboard-area.pattern-dots {
+  background-image: radial-gradient(rgba(255, 128, 166, 0.3) 2px, transparent 2px); background-size: 24px 24px;
+}
+
+.board-placeholder {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 0.95rem; font-weight: 600; pointer-events: none;
+}
+
+/* Watermark Canvas */
+.canvas-watermark {
+  position: absolute; bottom: 16px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; pointer-events: none; opacity: 0.75;
+}
+.wm-title { font-family: 'Fredoka', cursive; font-weight: 700; font-size: 1rem; color: #FF4081; }
+.wm-sub { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); }
+
+/* --- Styling Item di Board (Foto, Stiker, Text Note) --- */
+.board-item {
+  position: absolute; cursor: grab; user-select: none; touch-action: none;
+}
+.board-item:active { cursor: grabbing; }
+
+/* Bingkai Foto Polaroid yang Bisa Diatur Ukurannya */
+.draggable-photo {
+  background: white; padding: 10px 10px 28px 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  border-radius: 4px; resize: both; overflow: hidden; min-width: 120px; min-height: 140px;
+  width: 160px; height: 190px; transform: rotate(-2deg);
+}
+.draggable-photo img {
+  width: 100%; height: calc(100% - 20px); object-fit: cover; display: block; border-radius: 2px; pointer-events: none;
+}
+
+/* Styling Otomatis untuk Polaroid Landscape */
+.draggable-photo.landscape-frame {
+  width: 210px; 
+  height: 160px;
+  padding: 10px 10px 28px 10px;
+}
+.draggable-photo.landscape-frame img {
+  width: 100%;
+  height: calc(100% - 20px);
+}
+
+.draggable-sticker { font-size: 3.2rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+
+/* Stiker Gambar Meme */
+.draggable-meme {
+  width: 130px;
+  height: 130px;
+  resize: both;
+  overflow: hidden;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.2));
+  transform: rotate(3deg);
+}
+.draggable-meme img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+/* Sticky Note / Novel Quote dengan Stabilo & Text Formatting */
+.draggable-quote {
+  padding: 12px 16px; font-size: 1rem; border-radius: 6px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  max-width: 240px; word-break: break-word; transform: rotate(1deg); font-family: 'Fredoka', cursive;
+}
+
+/* Style khusus saat mode Transparent + Shadow dipilih */
+.draggable-quote.no-bg-shadow {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 4px 8px;
+  font-size: 1.2rem;
+  text-shadow: 2px 2px 0px rgba(255, 128, 166, 0.5), 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom Exit Confirmation Modal Overlay */
+.modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(18, 16, 22, 0.65) !important;
+  backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999999 !important;
+  padding: 20px !important;
+}
+
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.exit-card {
+  background: var(--card-bg) !important;
+  padding: 24px !important;
+  border-radius: var(--border-radius-lg) !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  text-align: center !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35) !important;
+  border: 2px solid var(--border-color) !important;
+  animation: modalBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalBounce {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.meme-container {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 2px dashed var(--primary-pink);
+  background: #EFE8DA;
+}
+
+.exit-meme-img {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.danger-text {
+  color: #FF5252 !important;
+  background: rgba(255, 82, 82, 0.1) !important;
+  border-color: rgba(255, 82, 82, 0.2) !important;
+}
+
+.studio-footer { margin-top: 40px; padding: 20px 0; text-align: center; border-top: 2px dashed var(--border-color); }
+.studio-footer p { font-size: 0.9rem; color: var(--text-muted); }
+.studio-footer strong { color: var(--primary-pink); font-family: 'Fredoka', cursive; }
+.hidden { display: none !important; }
+
+@media (max-width: 900px) {
+  .studio-workspace { grid-template-columns: 1fr; }
+  .moodboard-area { height: 480px; }
+}

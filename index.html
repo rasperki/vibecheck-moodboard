@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeCheck! ✨ Mood Board Generator by Gege's Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Library untuk Export Canvas ke PNG -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- Background Animated Canvas (Floating Doodles) -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="studio-header">
+      <div class="header-top">
+        <div class="logo">VibeCheck! <span>✨</span></div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+      <p class="subtitle">Create & curating your aesthetic mood board ★</p>
+    </header>
+
+    <main class="studio-workspace">
+      <!-- Sidebar / Toolkit Panel -->
+      <aside class="toolkit-card">
+        <h3>Design Toolkit</h3>
+
+        <!-- 1. Upload Foto Polaroid -->
+        <div class="setting-group">
+          <label>1. Add Your Photos (Polaroid)</label>
+          <label for="image-upload" class="cute-btn primary upload-btn">
+            📁 Upload Photos
+          </label>
+          <input type="file" id="image-upload" accept="image/*" multiple class="hidden">
+        </div>
+
+        <!-- 2. Opsi Background Canvas -->
+        <div class="setting-group">
+          <label>2. Canvas Background</label>
+          <div class="color-picker-row">
+            <button class="color-dot active" data-bg="#FAF7F2" style="background: #FAF7F2;" title="Cream"></button>
+            <button class="color-dot" data-bg="#FFD6E5" style="background: #FFD6E5;" title="Baby Pink"></button>
+            <button class="color-dot" data-bg="#D7F9F1" style="background: #D7F9F1;" title="Mint Green"></button>
+            <button class="color-dot" data-bg="#FFF5BA" style="background: #FFF5BA;" title="Butter Yellow"></button>
+            <button class="color-dot" data-bg="#E2D4F9" style="background: #E2D4F9;" title="Lavender"></button>
+            <button class="color-dot" data-bg="#2D2B30" style="background: #2D2B30;" title="Dark Charcoal"></button>
+          </div>
+          <div class="pattern-pills">
+            <button class="pill-btn active" data-pattern="solid">Solid</button>
+            <button class="pill-btn" data-pattern="grid">Grid</button>
+            <button class="pill-btn" data-pattern="dots">Dots</button>
+          </div>
+        </div>
+
+        <!-- 3. Tambah Icons & Emojis -->
+        <div class="setting-group">
+          <label>3. Add Icons & Emojis</label>
+          <div class="stamp-pills">
+            <button class="stamp-btn" data-stamp="🎀">🎀</button>
+            <button class="stamp-btn" data-stamp="💖">💖</button>
+            <button class="stamp-btn" data-stamp="🧸">🧸</button>
+            <button class="stamp-btn" data-stamp="🌸">🌸</button>
+            <button class="stamp-btn" data-stamp="✨">✨</button>
+            <button class="stamp-btn" data-stamp="⭐">⭐</button>
+            <button class="stamp-btn" data-stamp="🍒">🍒</button>
+            <button class="stamp-btn" data-stamp="👑">👑</button>
+            <button class="stamp-btn" data-stamp="💌">💌</button>
+            <button class="stamp-btn" data-stamp="🌙">🌙</button>
+            <button class="stamp-btn" data-stamp="🍀">🍀</button>
+            <button class="stamp-btn" data-stamp="🦋">🦋</button>
+          </div>
+        </div>
+
+        <!-- 4. Add Meme Stickers -->
+        <div class="setting-group">
+          <label>4. Add Meme Stickers 😜</label>
+          <label for="meme-upload" class="cute-btn secondary upload-btn">
+            🎭 Upload Meme Images
+          </label>
+          <input type="file" id="meme-upload" accept="image/*" multiple class="hidden">
+        </div>
+
+        <!-- 5. Tambah Text / Novel Quote & Stabilo -->
+        <div class="setting-group">
+          <label>5. Add Text / Novel Quote</label>
+          <input type="text" id="note-text-input" class="text-input-box" placeholder="Type your quote or note...">
+          
+          <!-- Formatting Toolbar -->
+          <div class="format-toolbar">
+            <button class="format-btn" id="fmt-bold" title="Bold"><b>B</b></button>
+            <button class="format-btn" id="fmt-italic" title="Italic"><i>I</i></button>
+            <button class="format-btn" id="fmt-underline" title="Underline"><u>U</u></button>
+            
+            <!-- Warna Text -->
+            <input type="color" id="text-color-picker" value="#3A353F" title="Text Color">
+
+            <!-- Efek Stabilo & Transparent Shadow -->
+            <select id="highlighter-select" title="Background Style">
+              <option value="none">Solid Background</option>
+              <option value="transparent-shadow">✨ Transparent + Shadow</option>
+              <option value="#FFF59D">Yellow Stabilo</option>
+              <option value="#FF80AB">Pink Stabilo</option>
+              <option value="#A7FFEB">Mint Stabilo</option>
+              <option value="#CE93D8">Purple Stabilo</option>
+            </select>
+          </div>
+          <button id="btn-add-note" class="cute-btn secondary" style="width: 100%; margin-top: 8px;">Add Note to Board</button>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div class="toolkit-actions">
+          <button id="btn-export" class="cute-btn success">💾 Save Mood Board</button>
+          <button id="btn-clear-board" class="cute-btn secondary danger">🗑️ Clear Canvas</button>
+        </div>
+      </aside>
+
+      <!-- Main Mood Board Workspace -->
+      <section class="board-card">
+        <div class="board-header">
+          <span>Canvas Workspace (Drag, Move & Arrange)</span>
+          <span class="help-badge">Tip: Double click item to delete</span>
+        </div>
+
+        <!-- Element Tempat Menyusun Kolase Mood Board -->
+        <div id="moodboard-canvas" class="moodboard-area pattern-solid">
+          <div class="board-placeholder" id="placeholder-text">
+            <span>✨ Drag items here or upload photos to start your mood board!</span>
+          </div>
+          
+          <!-- Watermark Brand Gege's Lab -->
+          <div class="canvas-watermark">
+            <span class="wm-title">VibeCheck! ✨</span>
+            <span class="wm-sub">by Gege's Lab</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="studio-footer">
+      <p>Crafted with 💖 by <strong>Gege's Lab</strong> © 2026</p>
+    </footer>
+  </div>
+
+  <!-- Custom Exit Confirmation Modal (Meme Cat Alert) -->
+  <div id="exit-modal" class="modal-overlay hidden">
+    <div class="modal-card exit-card">
+      <div class="meme-container">
+        <svg class="exit-meme-img" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#EFE8DA"/>
+          <!-- Cute Cat Drawing (Centered & Clean) -->
+          <ellipse cx="150" cy="120" rx="75" ry="65" fill="#FFFFFF"/>
+          <polygon points="95,75 75,20 120,60" fill="#FFFFFF" stroke="#3A353F" stroke-width="4"/>
+          <polygon points="205,75 225,20 180,60" fill="#FFFFFF" stroke="#3A353F" stroke-width="4"/>
+          <polygon points="100,68 85,35 112,55" fill="#FFB7C5"/>
+          <polygon points="200,68 215,35 188,55" fill="#FFB7C5"/>
+          <!-- Big Cute Eyes -->
+          <ellipse cx="118" cy="105" rx="18" ry="22" fill="#3A353F"/>
+          <ellipse cx="182" cy="105" rx="18" ry="22" fill="#3A353F"/>
+          <circle cx="113" cy="98" r="5" fill="#FFFFFF"/>
+          <circle cx="177" cy="98" r="5" fill="#FFFFFF"/>
+          <!-- Nose & Mouth -->
+          <polygon points="150,120 144,127 156,127" fill="#FF80A6"/>
+          <path d="M 142,133 Q 150,140 158,133" fill="none" stroke="#3A353F" stroke-width="3" stroke-linecap="round"/>
+          <!-- Raised Brow (Are You Sure Meme Vibe) -->
+          <path d="M 100,75 Q 118,52 138,78" fill="none" stroke="#FF4081" stroke-width="5" stroke-linecap="round"/>
+          <path d="M 162,80 L 198,76" fill="none" stroke="#3A353F" stroke-width="4" stroke-linecap="round"/>
+          <!-- Whiskers -->
+          <line x1="75" y1="115" x2="102" y2="117" stroke="#3A353F" stroke-width="3"/>
+          <line x1="72" y1="126" x2="100" y2="124" stroke="#3A353F" stroke-width="3"/>
+          <line x1="225" y1="115" x2="198" y2="117" stroke="#3A353F" stroke-width="3"/>
+          <line x1="228" y1="126" x2="200" y2="124" stroke="#3A353F" stroke-width="3"/>
+          <!-- Text Badge -->
+          <rect x="45" y="155" width="210" height="35" rx="17" fill="#FF4081"/>
+          <text x="150" y="178" font-family="'Fredoka', cursive" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ARE YOU SURE? 🤔</text>
+        </svg>
+      </div>
+      <h3>Eits, mau kemana nih? 😾</h3>
+      <p>Mood board kamu belum tentu kesimpen lho kalau ditutup sekarang. Yakin mau ninggalin VibeCheck? ✨</p>
+      <div class="modal-buttons">
+        <button id="btn-stay" class="cute-btn primary">Nggak jadi, lanjut curating! 💖</button>
+        <button id="btn-leave" class="cute-btn secondary danger-text">Tetap Keluar 🚪</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
